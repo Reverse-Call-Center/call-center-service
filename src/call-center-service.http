@@ -1,0 +1,4 @@
+@call_center_service_HostAddress = http://localhost:5008
+
+GET {{call_center_service_HostAddress}}/Receipt/create
+
