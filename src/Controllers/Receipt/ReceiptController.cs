@@ -1,7 +1,7 @@
 ﻿using call_center_service.Persistence;
+using call_center_service.Util;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace call_center_service.Controllers.Receipt;
 
@@ -25,6 +25,7 @@ public class ReceiptController(AppDbContext _dbContext, ILogger<ReceiptControlle
         {
             CreatorId = userId,
             BrandId = brand.BrandId,
+            TransactionId = GenerateUtil.GenerateRandomCode(12)
         };
 
         try

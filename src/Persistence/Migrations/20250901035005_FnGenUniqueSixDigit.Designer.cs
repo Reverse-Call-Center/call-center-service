@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using call_center_service.Persistence;
@@ -11,9 +12,11 @@ using call_center_service.Persistence;
 namespace call_center_service.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250901035005_FnGenUniqueSixDigit")]
+    partial class FnGenUniqueSixDigit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,38 +60,6 @@ namespace call_center_service.Persistence.Migrations
                     b.ToTable("Brands");
                 });
 
-            modelBuilder.Entity("call_center_service.Entities.Interaction", b =>
-                {
-                    b.Property<Guid>("InteractionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
-
-                    b.Property<string>("InteractionData")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<DateTime>("InteractionTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("NOW()");
-
-                    b.Property<string>("InteractionType")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<Guid>("SessionId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("InteractionId");
-
-                    b.HasIndex("SessionId");
-
-                    b.ToTable("Interactions");
-                });
-
             modelBuilder.Entity("call_center_service.Entities.Receipt", b =>
                 {
                     b.Property<Guid>("ReceiptId")
@@ -107,19 +78,11 @@ namespace call_center_service.Persistence.Migrations
                     b.Property<long>("CreatorId")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("IsValid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(true);
-
                     b.Property<int>("RedemptionCode")
-                        .ValueGeneratedOnAdd()
                         .HasMaxLength(6)
-                        .HasColumnType("integer")
-                        .HasDefaultValueSql("gen_unique_six_digit()");
+                        .HasColumnType("integer");
 
                     b.Property<string>("TransactionId")
-                        .IsRequired()
                         .HasMaxLength(12)
                         .HasColumnType("character varying(12)");
 
@@ -129,57 +92,7 @@ namespace call_center_service.Persistence.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.HasIndex("RedemptionCode")
-                        .IsUnique();
-
                     b.ToTable("Receipts");
-                });
-
-            modelBuilder.Entity("call_center_service.Entities.Session", b =>
-                {
-                    b.Property<Guid>("SessionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValueSql("gen_random_uuid()");
-
-                    b.Property<int>("RedemptionCode")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("SessionEnd")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("SessionFingerPrint")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<string>("SessionIpAddress")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<string>("SessionPhoneNumber")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<DateTime>("SessionStart")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("NOW()");
-
-                    b.Property<string>("SessionType")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.HasKey("SessionId");
-
-                    b.HasIndex("RedemptionCode");
-
-                    b.HasIndex("SessionFingerPrint");
-
-                    b.HasIndex("SessionIpAddress");
-
-                    b.HasIndex("SessionPhoneNumber");
-
-                    b.ToTable("Sessions");
                 });
 
             modelBuilder.Entity("call_center_service.Entities.Receipt", b =>
