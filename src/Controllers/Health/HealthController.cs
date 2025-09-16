@@ -7,12 +7,11 @@ namespace call_center_service.Controllers.Health;
 
 [ApiController]
 [Route("[controller]")]
-public class HealthController(AppDbContext _dbContext, ILogger<ReceiptController> _logger) : Controller
+public class HealthController() : Controller
 {
     [HttpGet()]
-    public async Task<IActionResult> GetAsync()
+    public IActionResult Get()
     {
-        _logger.LogInformation("Getting health check status");
         return Ok("Healthy");
     }
 }
