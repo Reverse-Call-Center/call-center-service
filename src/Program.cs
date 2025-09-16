@@ -11,6 +11,8 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        builder.Services.AddHealthChecks();
         
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? Environment.GetEnvironmentVariable("DefaultConnection");
         if (string.IsNullOrEmpty(connectionString))
@@ -48,6 +50,8 @@ public class Program
         app.UseAuthorization();
         
         app.MapControllers();
+        
+        app.MapHealthChecks("/health");
 
         app.Run();
     }
