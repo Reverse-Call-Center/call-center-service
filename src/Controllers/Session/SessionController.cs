@@ -71,12 +71,12 @@ public class SessionController(AppDbContext _dbContext, ILogger<SessionControlle
     }
 
     [HttpGet("validate")]
-    public async Task<IActionResult> Validate(Guid sessionId)
+    public async Task<IActionResult> Validate(String sessionId)
     {
         if (string.IsNullOrWhiteSpace(sessionId.ToString()))
             return BadRequest("Invalid session id");
         
-        if (Guid.TryParse(sessionId.ToString(), out var sessionGuid))
+        if (Guid.TryParse(sessionId, out var sessionGuid))
             return Ok(await _dbContext.Sessions.AnyAsync(x => x.SessionId == sessionGuid));
         
         return BadRequest("Invalid session id");
@@ -91,7 +91,7 @@ public class SessionController(AppDbContext _dbContext, ILogger<SessionControlle
         try
         {
             var affectedRows = await _dbContext.Database.ExecuteSqlRawAsync(
-                "UPDATE \"Sessions\" SET \"SessionEnd\" = NOW() WHERE \"SessionId\" = {0} AND \"SessionEnd\" IS NULL",
+                "UPDATE \"Sessions\" SET \"SessionEnd\" = NOW() WHERE \"SessionId\" = {0}",
                 sessionId);
         
             if (affectedRows == 0)
