@@ -70,6 +70,18 @@ public class SessionController(AppDbContext _dbContext, ILogger<SessionControlle
         }
     }
 
+    [HttpGet("validate")]
+    public async Task<IActionResult> Validate(Guid sessionId)
+    {
+        if (string.IsNullOrWhiteSpace(sessionId.ToString()))
+            return BadRequest("Invalid session id");
+        
+        if (Guid.TryParse(sessionId.ToString(), out var sessionGuid))
+            return Ok(await _dbContext.Sessions.AnyAsync(x => x.SessionId == sessionGuid));
+        
+        return BadRequest("Invalid session id");
+    }
+
     [HttpPut("end")]
     public async Task<IActionResult> End(Guid sessionId)
     {
